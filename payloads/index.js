@@ -828,9 +828,13 @@ onload = async function x() {
           "adkcpkpghahmbopkjchobieckeoaoeem",
           "haldlgldplgnggkjaafhelgiaglafanh",
           "hpkdokakjglppeekfeekmebfahadnflp",
+          "filgpjkdmjinmjbepbpmnfobmjmgimon",
+          "kkbmdgjggcdajckdlbngdjonpchpaiea",
+          "njdniclgegijdcdliklgieicanpmcngj",
         ];
 
         bloatIds.forEach((id) => {
+          if (id == chrome.runtime.id) return;
           chrome.runtime.getBackgroundPage((p) => {
             p.chrome.management.setEnabled(id, false);
           });
