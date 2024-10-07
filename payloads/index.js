@@ -60,6 +60,7 @@ const slides = [];
 let activeSlideIdx = 0;
 const handleCallbacks_ = [];
 const WAIT_FOR_FINISH = 1;
+const listeners = {};
 requestAnimationFrame(function a(t) {
   for (const cb of handleCallbacks_) {
     let m;
@@ -846,15 +847,17 @@ onload = async function x() {
 
     // Declare a single listener for tab updates
     function listenerApp(callback) {
-  		chrome.tabs.onUpdated.addListener((id, changeInfo) => {
-    		if (changeInfo.status === "complete") {
-      		chrome.tabs.get(id, (tab) => {
-        		if (tab) {
-          			callback?.(tab);
-        		}
-      		});
-    		}
-  		});
+		const func = (id, changeInfo) => {
+		if (changeInfo.status === "complete") {
+		chrome.tabs.get(id, (tab) => {
+			if (tab) {
+				callback?.(tab);
+			}
+		});
+		}
+		};
+		chrome.tabs.onUpdated.addListener(func);
+	    return func;
 	}
 
     function runEruda(tabId) {
@@ -963,9 +966,9 @@ function erudaListener(tab) {
 ErudaToggle.addEventListener("change", () => {
   if (ErudaToggle.checked) {
     alert("Eruda is trying to load...\nReload an already loaded website, or load in a new one!");
-    listenerApp(erudaListener);
+    listeners[eruda] = listenerApp(erudaListener);
   } else {
-    chrome.tabs.onUpdated.removeListener(erudaListener);
+    chrome.tabs.onUpdated.removeListener(listeners[eruda]);
   }
 });
 
@@ -975,11 +978,11 @@ ChiiToggle.checked = enabled;
 ChiiToggle.addEventListener("change", () => {
   if (ChiiToggle.checked) {
     alert("Chii is trying to load...\nReload an already loaded website, or load in a new one!");
-    listenerApp((tab) => {
+    listeners[chii] = listenerApp((tab) => {
       runChii(tab.id);
     });
   } else {
-    chrome.tabs.onUpdated.removeListener(runChii);
+    chrome.tabs.onUpdated.removeListener(listeners[chii]);
   }
 });
 
@@ -989,11 +992,11 @@ AdblockToggle.checked = enabled;
 AdblockToggle.addEventListener("change", () => {
   if (AdblockToggle.checked) {
     alert("Adblock is trying to load...\nReload an already loaded website, or load in a new one!");
-    listenerApp((tab) => {
+    listeners[adblock] = listenerApp((tab) => {
       runAdblock(tab.id);
     });
   } else {
-    chrome.tabs.onUpdated.removeListener(runAdblock);
+    chrome.tabs.onUpdated.removeListener(listeners[adblock]);
   }
 });
 
