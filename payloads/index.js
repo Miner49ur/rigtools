@@ -23,21 +23,21 @@ const managementTemplate = `
 <li class="toggle-card" id="eruda">
       <span class="extension-name">Eruda</span>
       <label class="toggle-switch">
-          <input type="checkbox" ${enabled ? "checked" : ""}>
+          <input type="checkbox">
           <span class="slider"></span>
       </label>
 </li>
 <li class="toggle-card" id="chii">
       <span class="extension-name">Chii</span>
       <label class="toggle-switch">
-          <input type="checkbox" ${enabled ? "checked" : ""}>
+          <input type="checkbox">
           <span class="slider"></span>
       </label>
 </li>
 <li class="toggle-card" id="adblock">
       <span class="extension-name">Adblock</span>
       <label class="toggle-switch">
-          <input type="checkbox" ${enabled ? "checked" : ""}>
+          <input type="checkbox">
           <span class="slider"></span>
       </label>
 </li>
