@@ -19,10 +19,28 @@ const managementTemplate = `
 <br/>
 <button id="current-extension">Disable injected extension</button>
 <button id="rmv-cmn-blt">Remove Bloat</button>
-<div id="tabs-buttons" style="display: none;">
-<button id="eruda">Load Eruda</button>
-<button id="chii">Load Chii</button>
-<button id="adblock">Adblock</button>
+<div id="tabs-buttons" style="display: inline;">
+<li class="toggle-card" id="eruda">
+      <span class="extension-name">Eruda</span>
+      <label class="toggle-switch">
+          <input type="checkbox" ${enabled ? "checked" : ""}>
+          <span class="slider"></span>
+      </label>
+</li>
+<li class="toggle-card" id="chii">
+      <span class="extension-name">Chii</span>
+      <label class="toggle-switch">
+          <input type="checkbox" ${enabled ? "checked" : ""}>
+          <span class="slider"></span>
+      </label>
+</li>
+<li class="toggle-card" id="adblock">
+      <span class="extension-name">Adblock</span>
+      <label class="toggle-switch">
+          <input type="checkbox" ${enabled ? "checked" : ""}>
+          <span class="slider"></span>
+      </label>
+</li>
 <button id="ed-hax">Edpuzzle hax</button>
 </div>
 <button id="swamp">Swamp</button>
@@ -443,310 +461,301 @@ const fileManagerPrivateTemplate = `
 const htmlStyle = `
     <style>
       body {
-        font-family: monospace, sans-serif;
-        background-color: #000000;
-        color: #fff;
-        margin: 0;
-        padding: 20px;
-      }
+  font-family: monospace, sans-serif;
+  background-color: #000000;
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+}
 
-      body::-webkit-scrollbar {
-        display: none;
-      }
+body::-webkit-scrollbar {
+  display: none;
+}
 
-      #chrome_management_disable_ext {
-        max-width: 800px;
-        margin: 0 auto;
-      }
+#chrome_management_disable_ext {
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-      #ext_default {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
+#ext_default {
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-      h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
 
-      .description {
-        margin-bottom: 20px;
-        color: #9aa0a6;
-      }
+.description {
+  margin-bottom: 20px;
+  color: #9aa0a6;
+}
 
-      .extension-disabler {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #0a0a0a;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-      }
+.extension-disabler {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0a0a0a;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
 
-      ul {
-        list-style-type: none;
-        padding: 0;
-        padding-bottom: 50px;
-      }
+ul {
+  list-style-type: none;
+  padding: 0;
+  padding-bottom: 50px;
+}
 
-      .extension-card {
-      /*   background-color: #0a0a0a; */
-        border: 2px solid #0a0a0a;
-        margin-bottom: 10px;
-        padding: 15px;
-        border-radius: 8px;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-      }
+.extension-card {
+  /*   background-color: #0a0a0a; */
+  border: 2px solid #0a0a0a;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
 
-      .extension-card:has(input:checked) {
-        background-color: #0a0a0a;
-        border: 2px solid #0000;
-      }
+.extension-card:has(input:checked) {
+  background-color: #0a0a0a;
+  border: 2px solid #0000;
+}
 
-      .extension-card-all {
-      /*   background-color: #0a0a0a; */
-        border: 2px solid #0a0a0a;
-        margin-bottom: 10px;
-        padding: 15px;
-        border-radius: 8px;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-      }
+.toggle-card {
+  /*   background-color: #0a0a0a; */
+  border: 2px solid #0a0a0a;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
 
-      .extension-card-all:has(input:checked) {
-        background-color: #0a0a0a;
-        border: 2px solid #0000;
-      }
+.toggle-card:has(input:checked) {
+  background-color: #0a0a0a;
+  border: 2px solid #0000;
+}
 
-      .extension-icon {
-        width: 32px;
-        padding-right: 20px;
-        cursor: pointer;
-      }
+.extension-card-all {
+  /*   background-color: #0a0a0a; */
+  border: 2px solid #0a0a0a;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
 
-      .extension-name {
-        font-weight: bold;
-      }
+.extension-card-all:has(input:checked) {
+  background-color: #0a0a0a;
+  border: 2px solid #0000;
+}
 
-      .toggle-switch {
-        margin-left: auto; 
-        margin-right: 0;
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 36px;
-      }
+.extension-icon {
+  width: 32px;
+  padding-right: 20px;
+  cursor: pointer;
+}
 
-      .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
+.extension-name {
+  font-weight: bold;
+}
 
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #0000;
-        transition: .4s;
-        border-radius: 34px;
-        border: 2px solid #0a0a0a;
-        
-      }
-      .header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .logo {
-        width: 4em; /* Adjust this size as needed */
-        height: auto;
-        margin-right: 10px;
-      }
+.toggle-switch {
+  margin-left: auto;
+  margin-right: 0;
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 36px;
+}
 
-      .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-      }
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
 
-      input:checked+.slider {
-        background-color: #a200ff;
-        border: 2px solid #222;
-      }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #0000;
+  transition: 0.4s;
+  border-radius: 34px;
+  border: 2px solid #0a0a0a;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo {
+  width: 4em; /* Adjust this size as needed */
+  height: auto;
+  margin-right: 10px;
+}
 
-      input:checked+.slider:before {
-        transform: translateX(24px);
-      }
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
 
-      .tablist-item {
-        border: 2px solid #0a0a0a;
-        margin-bottom: 10px;
-        padding: 15px;
-        border-radius: 8px;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-      }
-      
-      .tablist-item img {
-        max-width: 25px;
-        margin-right: 10px;
-      }
+input:checked + .slider {
+  background-color: #a200ff;
+  border: 2px solid #222;
+}
 
-      .tablist-item span {
-        padding: 10px, 0;
-        text-overflow: ellipsis;
-        width: 100%;
-        white-space: nowrap;
-        overflow: hidden;
-        word-break: break-all;
-        }
-        
-        .tablist-item span:hover{
-          overflow: visible; 
-          white-space: normal;
-          height:auto;  
-        }
-        
-        button {
-        background-color: #810aff;
-        color: white;
-        border: none;
-        padding: 9px 15px;
-        text-align: center;
-        border-radius: 5px;
-        margin: 4px 2px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
 
-        
-        text-decoration: none;
-        display: inline-block;
-      }
+.tablist-item {
+  border: 2px solid #0a0a0a;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
 
-      button:hover {
-        background-color: #A324ED;
-      }
+.tablist-item img {
+  max-width: 25px;
+  margin-right: 10px;
+}
 
-      button:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
-      }
+.tablist-item span {
+  padding: 10px, 0;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  word-break: break-all;
+}
 
-      #current-extension, #rmv-cmn-blt {
-        background-color: #ff564a;
-        font-family: Arial;
-        font-size: medium;
-        font-weight: bold;
-      }
-      #eruda{
-        background-color: #752bff;
-        font-family: Arial;
-        font-size: medium;
-        font-weight: bold;
-      }
-      #eruda:hover{
-        background-color: #6525db;
-      }
-      #chii{
-        background-color: #9bdb25;
-        font-family: Arial;
-        font-size: medium;
-        font-weight: bold;
-      }
-      #chii:hover{
-        background-color: #abeb35;
-      }
-       #ed-hax{
-        background-color: #ffce2e;
-        font-family: Arial;
-        font-size: medium;
-        font-weight: bold;
-      }
-      #ed-hax:hover{
-        background-color: #e3b622;
-      }
-      #adblock {
-        background-color: #ff4d4d;
-        font-family: Arial;
-        font-size: medium;
-        font-weight: bold;
-      }
-      #adblock:hover {
-        background-color: #ff5d5d;
-      }
-      #swamp{
-        background-color: #00a5df;
-        font-family: Arial;
-        font-size: medium;
-        font-weight: bold;
-      }
-      #swamp:hover{
-        background-color: #0084b3;
-      }
-      #hstfld{
-        background-color: #37de64;
-        font-family: Arial;
-        font-size: medium;
-        font-weight: bold;
-      }
-      #hstfld:hover{
-        background-color: #34ba58;
-      }
-      #current-extension:hover, #rmv-cmn-blt:hover {
-        background-color: #e04338;
-      }
-      .container {
-                  display: flex;
-                  gap: 10px;
-              }
-      #code-run {
-        align-self: flex-start;
-        background-color: #810aff;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      #code {
-        background: #0a0a0a;
-        color: white;
-        width: 100%;
-        min-height: 50px;
-        height: 200px;
-        resize: both;
-        border: 1px solid #6f08ff;
-        border-radius: 5px;
-        font-family: monospace;
-      }
-      .footer {
-        position: fixed;
-        bottom: 5px;
-        right: 10px;
-        color: #ffffff;
-      }
-      input[type='checkbox'] {
-        accent-color: #6f08ff !important;
-    }
-    input[id='TabURLInput'] {
-      background-color: #0a0a0a !important;
-      border-color: #6f08ff !important;
-      border-style: solid;
-      border-radius: 3px;
-  }
+.tablist-item span:hover {
+  overflow: visible;
+  white-space: normal;
+  height: auto;
+}
+
+button {
+  background-color: #810aff;
+  color: white;
+  border: none;
+  padding: 9px 15px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 4px 2px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  text-decoration: none;
+  display: inline-block;
+}
+
+button:hover {
+  background-color: #a324ed;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+#current-extension,
+#rmv-cmn-blt {
+  background-color: #ff564a;
+  font-family: Arial;
+  font-size: medium;
+  font-weight: bold;
+}
+
+#ed-hax {
+  background-color: #ffce2e;
+  font-family: Arial;
+  font-size: medium;
+  font-weight: bold;
+}
+#ed-hax:hover {
+  background-color: #e3b622;
+}
+#swamp {
+  background-color: #00a5df;
+  font-family: Arial;
+  font-size: medium;
+  font-weight: bold;
+}
+#swamp:hover {
+  background-color: #0084b3;
+}
+#hstfld {
+  background-color: #37de64;
+  font-family: Arial;
+  font-size: medium;
+  font-weight: bold;
+}
+#hstfld:hover {
+  background-color: #34ba58;
+}
+#current-extension:hover,
+#rmv-cmn-blt:hover {
+  background-color: #e04338;
+}
+.container {
+  display: flex;
+  gap: 10px;
+}
+#code-run {
+  align-self: flex-start;
+  background-color: #810aff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+#code {
+  background: #0a0a0a;
+  color: white;
+  width: 100%;
+  min-height: 50px;
+  height: 200px;
+  resize: both;
+  border: 1px solid #6f08ff;
+  border-radius: 5px;
+  font-family: monospace;
+}
+.footer {
+  position: fixed;
+  bottom: 5px;
+  right: 10px;
+  color: #ffffff;
+}
+input[type="checkbox"] {
+  accent-color: #6f08ff !important;
+}
+input[id="TabURLInput"] {
+  background-color: #0a0a0a !important;
+  border-color: #6f08ff !important;
+  border-style: solid;
+  border-radius: 3px;
+}
+
     </style>
   `;
 
@@ -937,26 +946,41 @@ onload = async function x() {
     }
 
     // Event listeners for buttons
-    container_extensions.querySelector("#eruda").onclick = () => {
-      alert("Eruda is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!");
-      listenerApp((tab) => {
-        runEruda(tab.id);
-      });
-    };
+    const ErudaToggle = container_extensions.querySelector("#eruda").querySelector("input");
 
-    container_extensions.querySelector("#chii").onclick = () => {
-      alert("Chii is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!");
-      listenerApp((tab) => {
-        runChii(tab.id);
-      });
-    };
+  	ErudaToggle.addEventListener("change", () => {
+    	if (ErudaToggle.checked) {
+        	alert("Eruda is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]...\nReload an already loaded website, or load in a new one!");
 
-    container_extensions.querySelector("#adblock").onclick = () => {
-      alert("Adblock is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \nreload an already loaded website, or load in a new one!");
-      listenerApp((tab) => {
-        runAdblock(tab.id);
-      });
-    };
+        	listenerApp((tab) => {
+            	runEruda(tab.id);
+        	});
+    	}
+	});
+
+    const ChiiToggle = container_extensions.querySelector("#chii").querySelector("input");
+
+  	ChiiToggle.addEventListener("change", () => {
+    	if (ChiiToggle.checked) {
+        	alert("Chii is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]...\nReload an already loaded website, or load in a new one!");
+
+        	listenerApp((tab) => {
+            	runChii(tab.id);
+        	});
+    	}
+	});
+
+	const AdblockToggle = container_extensions.querySelector("#adblock").querySelector("input");
+
+  	AdblockToggle.addEventListener("change", () => {
+    	if (AdblockToggle.checked) {
+        	alert("Adblock is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]...\nReload an already loaded website, or load in a new one!");
+
+        	listenerApp((tab) => {
+            	runAdblock(tab.id);
+        	});
+    	}
+	});
 
     container_extensions.querySelector("#ed-hax").onclick = () => {
       alert("Edpuzzle Hacks is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \ngo to your edpuzzle assignment and check if it works!");
