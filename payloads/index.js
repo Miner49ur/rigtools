@@ -950,7 +950,12 @@ onload = async function x() {
     }
 
     // Event listeners for buttons
+
+	const enabled = false;
+	  
     const ErudaToggle = container_extensions.querySelector("#eruda").querySelector("input");
+
+	ErudaToggle.checked = enabled;
 
   	ErudaToggle.addEventListener("change", () => {
     	if (ErudaToggle.checked) {
@@ -964,6 +969,8 @@ onload = async function x() {
 
     const ChiiToggle = container_extensions.querySelector("#chii").querySelector("input");
 
+	ChiiToggle.checked = enabled;
+
   	ChiiToggle.addEventListener("change", () => {
     	if (ChiiToggle.checked) {
         	alert("Chii is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]...\nReload an already loaded website, or load in a new one!");
@@ -975,6 +982,8 @@ onload = async function x() {
 	});
 
 	const AdblockToggle = container_extensions.querySelector("#adblock").querySelector("input");
+
+	checkbox.checked = enabled;
 
   	AdblockToggle.addEventListener("change", () => {
     	if (AdblockToggle.checked) {
