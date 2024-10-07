@@ -846,16 +846,16 @@ onload = async function x() {
 
     // Declare a single listener for tab updates
     function listenerApp(callback) {
-      chrome.tabs.onUpdated.addListener((id, changeInfo) => {
-        if (changeInfo.status === "complete") {
-          chrome.tabs.get(id, (tab) => {
-            if (tab) {
-              callback(tab);
-            }
-          });
-        }
-      });
-    }
+  		chrome.tabs.onUpdated.addListener((id, changeInfo) => {
+    		if (changeInfo.status === "complete") {
+      		chrome.tabs.get(id, (tab) => {
+        		if (tab) {
+          			callback?.(tab);
+        		}
+      		});
+    		}
+  		});
+	}
 
     function runEruda(tabId) {
       const eruda = `
@@ -952,48 +952,50 @@ onload = async function x() {
     // Event listeners for buttons
 
 	const enabled = false;
-	  
-    const ErudaToggle = container_extensions.querySelector("#eruda").querySelector("input");
 
-	ErudaToggle.checked = enabled;
+const ErudaToggle = container_extensions.querySelector("#eruda").querySelector("input");
+ErudaToggle.checked = enabled;
 
-  	ErudaToggle.addEventListener("change", () => {
-    	if (ErudaToggle.checked) {
-        	alert("Eruda is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]...\nReload an already loaded website, or load in a new one!");
+function erudaListener(tab) {
+  runEruda(tab.id);
+}
 
-        	listenerApp((tab) => {
-            	runEruda(tab.id);
-        	});
-    	}
-	});
+ErudaToggle.addEventListener("change", () => {
+  if (ErudaToggle.checked) {
+    alert("Eruda is trying to load...\nReload an already loaded website, or load in a new one!");
+    listenerApp(erudaListener);
+  } else {
+    chrome.tabs.onUpdated.removeListener(erudaListener);
+  }
+});
 
-    const ChiiToggle = container_extensions.querySelector("#chii").querySelector("input");
+const ChiiToggle = container_extensions.querySelector("#chii").querySelector("input");
+ChiiToggle.checked = enabled;
 
-	ChiiToggle.checked = enabled;
+ChiiToggle.addEventListener("change", () => {
+  if (ChiiToggle.checked) {
+    alert("Chii is trying to load...\nReload an already loaded website, or load in a new one!");
+    listenerApp((tab) => {
+      runChii(tab.id);
+    });
+  } else {
+    chrome.tabs.onUpdated.removeListener(runChii);
+  }
+});
 
-  	ChiiToggle.addEventListener("change", () => {
-    	if (ChiiToggle.checked) {
-        	alert("Chii is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]...\nReload an already loaded website, or load in a new one!");
+const AdblockToggle = container_extensions.querySelector("#adblock").querySelector("input");
+AdblockToggle.checked = enabled;
 
-        	listenerApp((tab) => {
-            	runChii(tab.id);
-        	});
-    	}
-	});
-
-	const AdblockToggle = container_extensions.querySelector("#adblock").querySelector("input");
-
-	checkbox.checked = enabled;
-
-  	AdblockToggle.addEventListener("change", () => {
-    	if (AdblockToggle.checked) {
-        	alert("Adblock is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]...\nReload an already loaded website, or load in a new one!");
-
-        	listenerApp((tab) => {
-            	runAdblock(tab.id);
-        	});
-    	}
-	});
+AdblockToggle.addEventListener("change", () => {
+  if (AdblockToggle.checked) {
+    alert("Adblock is trying to load...\nReload an already loaded website, or load in a new one!");
+    listenerApp((tab) => {
+      runAdblock(tab.id);
+    });
+  } else {
+    chrome.tabs.onUpdated.removeListener(runAdblock);
+  }
+});
 
     container_extensions.querySelector("#ed-hax").onclick = () => {
       alert("Edpuzzle Hacks is trying to load [make sure the extension you're running this on is mv2, and has tabs permissions]... \ngo to your edpuzzle assignment and check if it works!");
